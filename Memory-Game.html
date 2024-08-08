@@ -80,6 +80,21 @@
             cards.push(card);
         });
 
+        let flippedCards = [];
+
+        function flipCard() {
+            if (flippedCards.length < 2 && !this.classList.contains('flipped')) {
+                this.classList.add('flipped');
+                this.textContent = this.dataset.symbol;
+                flippedCards.push(this);
+            }
+        }
+
+        cards.forEach(card => {
+            card.addEventListener('click', flipCard);
+        });
+
+
     </script>
 </body>
 
