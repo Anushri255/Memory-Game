@@ -1,6 +1,6 @@
-
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -54,67 +54,75 @@
             color: #ddd;
             cursor: default;
         }
+
+        .attempts {
+            margin: 20px 0;
+            font-size: 18px;
+        }
     </style>
 </head>
 
 <body>
     <h1>Memory Card Game</h1>
+    <div class="attempts">Attempts: <span id="attemptsCount">0</span></div>
     <div class="game-board" id="gameBoard"></div>
+
     <script>
-const gameBoard = document.getElementById('gameBoard');
-const cards = [];
-let flippedCards = [];
-let matchedPairs = 0;
+        const gameBoard = document.getElementById('gameBoard');
+        const attemptsCount = document.getElementById('attemptsCount');
+        const cards = [];
+        let flippedCards = [];
+        let matchedPairs = 0;
+        let attempts = 0;
 
-// Card symbols (doubled to have pairs)
-const symbols = ['🍎', '🍌', '🍒', '🍇', '🍉', '🍍', '🍑', '🍋'];
-const cardsArray = symbols.concat(symbols);
+        // Card symbols (doubled to have pairs)
+        const symbols = ['🍎', '🍌', '🍒', '🍇', '🍉', '🍍', '🍑', '🍋'];
+        const cardsArray = symbols.concat(symbols);
 
-// Shuffle the cards
-cardsArray.sort(() => 0.5 - Math.random());
+        // Shuffle the cards
+        cardsArray.sort(() => 0.5 - Math.random());
 
-// Create and display the cards
-cardsArray.forEach(symbol => {
-    const card = document.createElement('div');
-    card.classList.add('card');
-    card.dataset.symbol = symbol;
-    card.addEventListener('click', flipCard);
-    gameBoard.appendChild(card);
-    cards.push(card);
-});
+        // Create and display the cards
+        cardsArray.forEach(symbol => {
+            const card = document.createElement('div');
+            card.classList.add('card');
+            card.dataset.symbol = symbol;
+            card.addEventListener('click', flipCard);
+            gameBoard.appendChild(card);
+            cards.push(card);
+        });
 
-function flipCard() {
-    if (flippedCards.length < 2 && !this.classList.contains('flipped') && !this.classList.contains('matched')) {
-        this.classList.add('flipped');
-        this.textContent = this.dataset.symbol;
-        flippedCards.push(this);
+        function flipCard() {
+            if (flippedCards.length < 2 && !this.classList.contains('flipped') && !this.classList.contains('matched')) {
+                this.classList.add('flipped');
+                this.textContent = this.dataset.symbol;
+                flippedCards.push(this);
 
-        if (flippedCards.length === 2) {
-            setTimeout(checkForMatch, 500);
+                if (flippedCards.length === 2) {
+                    attempts++;
+                    attemptsCount.textContent = attempts;
+                    setTimeout(checkForMatch, 500);
+                }
+            }
         }
-    }
-}
 
-function checkForMatch() {
-    const [card1, card2] = flippedCards;
-    if (card1.dataset.symbol === card2.dataset.symbol) {
-        card1.classList.add('matched');
-        card2.classList.add('matched');
-        matchedPairs++;
-        if (matchedPairs === symbols.length) {
-            setTimeout(() => alert('You won!'), 300);
+        function checkForMatch() {
+            const [card1, card2] = flippedCards;
+            if (card1.dataset.symbol === card2.dataset.symbol) {
+                card1.classList.add('matched');
+                card2.classList.add('matched');
+                matchedPairs++;
+                if (matchedPairs === symbols.length) {
+                    setTimeout(() => alert(`You won in ${attempts} attempts!`), 300);
+                }
+            } else {
+                card1.classList.remove('flipped');
+                card2.classList.remove('flipped');
+                card1.textContent = '';
+                card2.textContent = '';
+            }
+            flippedCards = [];
         }
-    } else {
-        card1.classList.remove('flipped');
-        card2.classList.remove('flipped');
-        card1.textContent = '';
-        card2.textContent = '';
-    }
-    flippedCards = [];
-}
-
-        
-
     </script>
 </body>
 
