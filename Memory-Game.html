@@ -59,38 +59,54 @@
             margin: 20px 0;
             font-size: 18px;
         }
+
+        .restart {
+            margin: 20px 0;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
     </style>
 </head>
 
 <body>
     <h1>Memory Card Game</h1>
     <div class="attempts">Attempts: <span id="attemptsCount">0</span></div>
+    <button class="restart" onclick="restartGame()">Restart Game</button>
     <div class="game-board" id="gameBoard"></div>
 
     <script>
         const gameBoard = document.getElementById('gameBoard');
         const attemptsCount = document.getElementById('attemptsCount');
-        const cards = [];
+        let cards = [];
         let flippedCards = [];
         let matchedPairs = 0;
         let attempts = 0;
 
         // Card symbols (doubled to have pairs)
         const symbols = ['🍎', '🍌', '🍒', '🍇', '🍉', '🍍', '🍑', '🍋'];
-        const cardsArray = symbols.concat(symbols);
+        let cardsArray = symbols.concat(symbols);
 
-        // Shuffle the cards
-        cardsArray.sort(() => 0.5 - Math.random());
+        // Shuffle and create cards
+        function createCards() {
+            // Clear previous cards
+            gameBoard.innerHTML = '';
+            cards = [];
+            cardsArray.sort(() => 0.5 - Math.random());
 
-        // Create and display the cards
-        cardsArray.forEach(symbol => {
-            const card = document.createElement('div');
-            card.classList.add('card');
-            card.dataset.symbol = symbol;
-            card.addEventListener('click', flipCard);
-            gameBoard.appendChild(card);
-            cards.push(card);
-        });
+            // Create and display the cards
+            cardsArray.forEach(symbol => {
+                const card = document.createElement('div');
+                card.classList.add('card');
+                card.dataset.symbol = symbol;
+                card.addEventListener('click', flipCard);
+                gameBoard.appendChild(card);
+                cards.push(card);
+            });
+        }
+
+        // Initialize the game
+        createCards();
 
         function flipCard() {
             if (flippedCards.length < 2 && !this.classList.contains('flipped') && !this.classList.contains('matched')) {
@@ -122,6 +138,15 @@
                 card2.textContent = '';
             }
             flippedCards = [];
+        }
+
+        // Restart game function
+        function restartGame() {
+            matchedPairs = 0;
+            attempts = 0;
+            attemptsCount.textContent = attempts;
+            flippedCards = [];
+            createCards();
         }
     </script>
 </body>
