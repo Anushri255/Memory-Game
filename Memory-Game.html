@@ -95,18 +95,24 @@
         });
         
         function checkForMatch() {
-            const [card1, card2] = flippedCards;
-            if (card1.dataset.symbol === card2.dataset.symbol) {
-                card1.classList.add('matched');
-                card2.classList.add('matched');
-            } else {
-                card1.classList.remove('flipped');
-                card2.classList.remove('flipped');
-                card1.textContent = '';
-                card2.textContent = '';
-            }
-            flippedCards = [];
+    const [card1, card2] = flippedCards;
+    if (card1.dataset.symbol === card2.dataset.symbol) {
+        card1.classList.add('matched');
+        card2.classList.add('matched');
+        matchedPairs++;
+        if (matchedPairs === symbols.length) {
+            setTimeout(() => alert('You won!'), 300);
         }
+    } else {
+        card1.classList.remove('flipped');
+        card2.classList.remove('flipped');
+        card1.textContent = '';
+        card2.textContent = '';
+    }
+    flippedCards = [];
+}
+
+        
 
     </script>
 </body>
